@@ -4,10 +4,10 @@ module.exports = {
     publicPath: process.env.NODE_ENV === 'production' ? '/store' : '/',
     devServer: {
         proxy: {
-            '^/api': {
+            '^/': {
                 changeOrigin: true,
-                target: 'http://opserver-new.fntest.ifengniao.net:6001',
-                pathRewrite: { '/api': '' }
+                target: 'https://xuzhiai.cn'
+                // pathRewrite: { '/': '' }
             }
         }
     },

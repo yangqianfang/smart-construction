@@ -4,14 +4,13 @@
 // import md5 from 'blueimp-md5'
 import Vue from 'vue'
 import axios from 'axios'
-import qs from 'qs'
+// import qs from 'qs'
 import { Toast } from 'vant'
 
 // const md5 = require('blueimp-md5')
 
 const defaults = {
     //baseURL: "/api",
-    //baseURL: "http://salesweb208.fntest.ifengniao.net:6001/api",
     basePath: '',
     headers: {},
     auth: {}
@@ -36,7 +35,8 @@ class Fetch {
             withCredentials: false,
             headers: {
                 Accept: 'application/json, text/plain, */*',
-                'Content-Type': 'application/x-www-form-urlencoded',
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': ' application/json;charset=UTF-8',
                 'Access-Control-Allow-Origin': '*'
             }
         })
@@ -59,7 +59,7 @@ class Fetch {
         this.axiosInstance.interceptors.request.use(
             (config) => {
                 if (config.method === 'post' && config.type !== 'upload') {
-                    config.data = qs.stringify(config.data)
+                    // config.data = qs.stringify(config.data)
                 }
                 return config
             },
@@ -163,12 +163,6 @@ class Fetch {
     }
 
     request(option) {
-        //测试代码
-        // if (process.env.NODE_ENV === 'production') {
-        //     option.url =
-        //         'http://opserver-new.fntest.ifengniao.net:6001' + option.url.replace('/api', '')
-        // }
-
         return this.axiosInstance(option)
     }
 

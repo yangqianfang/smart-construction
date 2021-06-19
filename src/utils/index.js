@@ -350,3 +350,65 @@ export function removeClass(ele, cls) {
         ele.className = ele.className.replace(reg, ' ')
     }
 }
+
+export function getItembyDate(list, date) {
+    return list.filter((item) => date == item.meterDatetime)
+}
+
+export function getMaxVal(array) {
+    return Math.max.apply(
+        Math,
+        array.map(function(o) {
+            return o.meterData // 需要比较的值
+        })
+    )
+}
+
+export function formatMeterData(data) {
+    // meterType1 水 2电
+    let elec = data.elec
+    let water = data.water
+    let elecMax = getMaxVal(elec)
+    let waterMax = getMaxVal(water)
+    // X轴最大值  x1.2 比例更好看不撑满
+    let max = Math.max(elecMax, waterMax) * 1.2
+    let avge = parseInt(max / 3)
+    // x 轴数据
+    let xAxis = [max, avge * 2, avge, 0, avge, avge * 2, max]
+
+    elec.forEach((item) => {
+        item.meterType = '2'
+        item.elecData = item.meterData
+    })
+    water.forEach((item) => {
+        item.meterType = '1'
+        item.waterData = item.meterData
+    })
+
+    let allData = elec.concat(water)
+    let newData = []
+    for (let i = 0; i < allData.length; i++) {
+        let item = allData[i]
+        item.max = max
+        item.miniDate = item.meterDatetime.substring(5, 10).replace('-', '/')
+        let node = getItembyDate(newData, item.meterDatetime)
+        if (node.length > 0) {
+            let nodeItem = node[0]
+            if (nodeItem.meterType === '1') {
+                nodeItem.elecData = item.elecData
+            }
+            if (nodeItem.meterType === '2') {
+                nodeItem.waterData = item.waterData
+            }
+        } else {
+            newData.push(item)
+        }
+    }
+    return {
+        xAxis,
+        series: newData
+    }
+    /* [
+        {meterDatetime:'2021-05-06',waterData:"11",elecData:'555'}
+    ] */
+}

@@ -229,58 +229,22 @@ a:hover {
 }
 .dn {
     display: none;
-}
-.picker-box {
-    height:30px;
-    line-height: 30px;
-    background:rgba(248,248,248,1);
-    text-align: center;
-    color:#333333;
+} 
+.gradient-border {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px; 
     position: relative;
-    border:1px solid rgba(255,255,255,0.55);
-    border-radius: 44px;
-    font-size: 12px;
-}
-.picker-box .down{
+    border-radius: 3px;
+  }
+  .gradient-border:after {
+    content: '';
     position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translate(0, -50%);
-    width: 10px;
-    height: 10px;
-}
-.picker-box .am-list-item{
-    background-color: transparent;
-}
-.picker-box .am-list-item.am-input-item {
-    height: 30px;
-    line-height: 30px;
-    min-height: auto;
-    padding-left:0;
-}
-.picker-box .am-list-item .am-list-line{
-    padding-right: 0;
-}
-.picker-box .am-list-item .am-list-line .am-input-control input{
-    text-align: center;
-    height: 30px;
-    /* line-height: 30px; */
-}
-.am-modal-footer .am-modal-button-group-h .am-modal-button{
-    color:#FF9500;
-}
-.am-modal-footer .am-modal-button-group-h .am-modal-button:first-child{
-    color:#FF9500;
-}
-.amap-geolocation-con{
-    z-index: 998!important;
-}
-.amap-logo,.amap-copyright{
-    display: none!important;
-}
-input:-webkit-autofill , textarea:-webkit-autofill, select:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
-    background-color:transparent;
-    background-image: none;
-    transition: background-color 50000s ease-in-out 0s;
-}
+    height: calc(100% +  2px * 2);
+    width: calc(100% +  2px * 2);
+    background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+    border-radius: calc(2 * 2px);
+    z-index: -1; 
+    
+  }
