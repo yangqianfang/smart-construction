@@ -1,6 +1,6 @@
 import $api from '@/plugins/api'
 
-import { formatMeterData } from '@/utils/index'
+import { formatMeterData, machineData } from '@/utils/index'
 const module = {
     namespaced: true,
     state: {
@@ -23,7 +23,8 @@ const module = {
             carDesc: '',
             carNo: ''
         },
-        meterData: []
+        meterData: [],
+        machineData: {}
     },
     mutations: {
         setProjectInfo(state, data) {
@@ -49,6 +50,9 @@ const module = {
         },
         setMeterData(state, data) {
             state.meterData = data
+        },
+        setMachineData(state, data) {
+            state.machineData = data
         }
     },
     getters: {},
@@ -77,6 +81,11 @@ const module = {
             const res = await $api.get('/site/weather/getWeatherInfo', data)
             commit('setWeather', res.data.data)
         },
+        // 塔吊视频位置信息
+        // eslint-disable-next-line no-unused-vars
+        async getMachineData({ commit }, data) {
+            commit('setMachineData', machineData)
+        },
 
         // 报警列表
         async getAlarmList({ commit }, data) {
@@ -87,62 +96,6 @@ const module = {
         //水电数据
         async getMeterData({ commit }, data) {
             const res = await $api.get('/site/meter/list', data)
-            console.log(res.data.data)
-
-            res.data = {
-                msg: 'success',
-                code: 0,
-                data: {
-                    elec: [
-                        {
-                            siteId: '100',
-                            meterId: '777',
-                            meterData: '800',
-                            meterDatetime: '2021-06-08'
-                        },
-                        {
-                            siteId: '100',
-                            meterId: '777',
-                            meterData: '1200',
-                            meterDatetime: '2021-06-07'
-                        },
-                        {
-                            siteId: '100',
-                            meterId: '777',
-                            meterData: '1250',
-                            meterDatetime: '2021-06-06'
-                        }
-                    ],
-                    water: [
-                        {
-                            siteId: '100',
-                            meterId: '666',
-                            meterData: '700',
-                            meterDatetime: '2021-06-08'
-                        },
-                        {
-                            siteId: '100',
-                            meterId: '666',
-                            meterData: '1620',
-                            meterDatetime: '2021-06-07'
-                        },
-                        {
-                            siteId: '100',
-                            meterId: '666',
-                            meterType: '1',
-                            meterData: '1670',
-                            meterDatetime: '2021-06-06'
-                        },
-                        {
-                            siteId: '100',
-                            meterId: '666',
-                            meterData: '1720',
-                            meterDatetime: '2021-06-05'
-                        }
-                    ]
-                }
-            }
-
             let formatData = formatMeterData(res.data.data)
             commit('setMeterData', formatData)
         },

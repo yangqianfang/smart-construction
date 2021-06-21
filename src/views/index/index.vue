@@ -1,20 +1,70 @@
 <template>
     <div class="wrap">
         <div class="content">
-            <div class="icon-box icon-box-01">
+            <div
+                class="icon-box "
+                v-for="(item, index) in machineData"
+                :key="index"
+                :style="{ top: item.top + 'px', left: item.left + 'px', 'z-index': item.zindex }"
+                :class="{
+                    'icon-box-01': item.type === '1',
+                    'icon-box-02': item.type === '2',
+                    'icon-box-03': item.type === '3'
+                }"
+                @mouseenter="hover(item)"
+                @mouseleave="out(item)"
+            >
                 <div class="icon"></div>
-                <div class="address-detail show">
-                    <div class="title">升降机1</div>
+                <div class="address-detail" :class="{ show: item.show === true }">
+                    <div class="title">{{ item.name }}</div>
                     <div class="split"></div>
-                    <div class="address">第二楼位置1</div>
+                    <div class="address">{{ item.address }}</div>
                 </div>
             </div>
-            <div class="icon-box icon-box-02">
+
+            <div
+                class="icon-box alarm danger"
+                v-for="(item, index) in realAlarmList"
+                :key="`a_${index}`"
+                :class="{
+                    danger: String(item.alarmLevel) === '1',
+                    warning: String(item.alarmLevel) === '0'
+                }"
+                :style="{
+                    top: item.deviceY + 'px',
+                    left: item.deviceX + 'px',
+                    'z-index': item.zindex
+                }"
+                @mouseenter="hover(item)"
+                @mouseleave="out(item)"
+                @click="toggleclick(item)"
+            >
+                <div class="icon"></div>
+                <div class="c-0"></div>
+                <div class="c-1"></div>
+                <div class="address-detail" :class="{ show: item.show === true }">
+                    <div class="title">{{ item.alarmType }}</div>
+                    <div class="split"></div>
+                    <div class="address">{{ item.alarmAddr }}</div>
+                </div>
+                <div class="warning-detail" :class="{ show: item.clickShow === true }">
+                    <div class="wd-img" v-if="item.alarmURI">
+                        <img :src="item.alarmURI" />
+                    </div>
+                    <div class="wd-text">
+                        <div class="wd-text-li">{{ item.alarmTime }}</div>
+                        <div class="wd-text-li">{{ item.alarmAddr }}</div>
+                        <div class="wd-text-li">{{ item.alarmType }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="icon-box icon-box-02">
                 <div class="icon"></div>
                 <div class="address-detail">
                     <div class="title">升降机1</div>
                     <div class="split"></div>
-                    <div class="address">第二楼位置1</div>
+                    <div class="address">{{ item.name }}</div>
                 </div>
             </div>
             <div class="icon-box icon-box-03">
@@ -56,7 +106,7 @@
                     <div class="split"></div>
                     <div class="address">第二楼位置1</div>
                 </div>
-            </div>
+            </div> -->
 
             <div class="sub-title">
                 <div class="left"></div>
@@ -66,10 +116,10 @@
             <div class="box left">
                 <div class="header-time">
                     <div class="time-box">
-                        <div class="time">12:05:12</div>
+                        <div class="time">{{ dateData.time }}</div>
                         <div class="date">
-                            <div class="data-text">星期一</div>
-                            <div class="data-text">2021年5月10日</div>
+                            <div class="data-text">{{ dateData.week }}</div>
+                            <div class="data-text">{{ dateData.date }}</div>
                         </div>
                     </div>
                     <div class="line-box">
@@ -206,9 +256,44 @@
                                             {{ item.name }}
                                         </div>
                                     </div>
-                                    <div class="wb-list">
+                                    <div class="wb-list" ref="wrapper">
                                         <div class="wb-list-wrap">
                                             <div
+                                                class="wl-item"
+                                                :class="{
+                                                    danger:
+                                                        String(item.alarmLevel) === '1' &&
+                                                        String(item.status) === '0',
+                                                    warning:
+                                                        String(item.alarmLevel) === '0' &&
+                                                        String(item.status) === '0'
+                                                }"
+                                                v-for="(item, index) in alarmList"
+                                                :key="index"
+                                            >
+                                                <div class="wt-img">
+                                                    <img :src="item.alarmURI" />
+                                                </div>
+                                                <div class="wt-text">
+                                                    <div class="wtt-01">
+                                                        {{ item.alarmTime }}
+                                                    </div>
+                                                    <div class="wtt-01">
+                                                        {{ item.alarmAddr }}
+                                                    </div>
+                                                    <div class="wtt-01">
+                                                        {{ item.alarmType }}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- <div class="swiper-slide">slider1</div>
+                                                <div class="swiper-slide">slider2</div>
+                                                <div class="swiper-slide">slider3</div> -->
+                                        </div>
+
+                                        <!-- <div class="wb-list-wrap"> -->
+                                        <!-- <div
                                                 class="wl-item danger"
                                                 v-for="(item, index) in alarmList"
                                                 :key="index"
@@ -221,15 +306,9 @@
                                                     <div class="wtt-01">{{ item.alarmAddr }}</div>
                                                     <div class="wtt-01">{{ item.alarmType }}</div>
                                                 </div>
-                                            </div>
-                                            <!-- <div class="swiper-container">
-                                                <div class="swiper-wrapper">
-                                                    <div class="swiper-slide">slider1</div>
-                                                    <div class="swiper-slide">slider2</div>
-                                                    <div class="swiper-slide">slider3</div>
-                                                </div>
                                             </div> -->
-                                            <!-- <div class="wl-item warning">
+
+                                        <!-- <div class="wl-item warning">
                                                 <div class="wt-img">
                                                     <img
                                                         src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fwww.chinatruck.org%2Fuploadfile%2F2019%2F0702%2F20190702031909797.jpg&refer=http%3A%2F%2Fwww.chinatruck.org&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626404889&t=8c9c004e87c71193ca1d47a753b8c6d8"
@@ -241,7 +320,7 @@
                                                     <div class="wtt-01">未戴安全帽</div>
                                                 </div>
                                             </div> -->
-                                        </div>
+                                        <!-- </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -386,7 +465,10 @@
                             </div>
                             <div class="item-content">
                                 <div class="chart-box">
-                                    <div class="bar-box">
+                                    <div
+                                        class="bar-box"
+                                        v-if="meterData.series && meterData.series.length > 0"
+                                    >
                                         <div class="line"></div>
                                         <div
                                             class="bb-li"
@@ -417,6 +499,13 @@
                                                 ></div>
                                             </div>
                                         </div>
+                                    </div>
+
+                                    <div
+                                        class="null"
+                                        v-if="meterData.series && meterData.series.length === 0"
+                                    >
+                                        暂无数据
                                     </div>
 
                                     <div class="axis-box">
@@ -470,26 +559,29 @@
 </template>
 
 <script>
-// import Vue from 'vue'
 import { mapState } from 'vuex'
-// import VueWebsocket from 'vue-websocket'
-// Vue.use(VueWebsocket, 'ws://xuzhiai.cn/ws/server')
-// import { debounce, deepClone } from '@/utils'
-import Swiper from 'swiper'
-import 'swiper/swiper-bundle.css'
+import BScroll from '@better-scroll/core'
+import { machineData, getDate } from '@/utils/index'
+console.log(BScroll)
 export default {
     components: {},
     data() {
         return {
+            interval: '',
+            listInterval: '',
+            machineData: machineData,
+            dateData: {},
             socket: '',
             alarm: {},
+            scroll: '',
             tabList: [
                 { id: 'all', name: '全部', checked: true },
                 { id: '安全帽', name: '安全帽', checked: false },
                 { id: '反光衣', name: '反光衣', checked: false },
                 { id: '烟火', name: '烟火', checked: false },
                 { id: '危险入侵', name: '危险入侵', checked: false }
-            ]
+            ],
+            realAlarmList: []
         }
     },
     computed: {
@@ -507,6 +599,8 @@ export default {
     destroyed() {},
 
     async mounted() {
+        // 获取日期
+        this.initDate()
         // 项目信息
         this.getProjectInfo()
         // 环境信息
@@ -520,18 +614,13 @@ export default {
         // 水电信息
         this.getMeterData()
         // 报警列表
-        this.getAlarmList({ get: 'all' })
+        this.getListInterval()
 
-        new Swiper('.swiper-container', {
-            loop: true,
-            pagination: '.swiper-pagination',
-            autoplay: 2000,
-            paginationClickable: true
+        this.scroll = new BScroll('.wb-list', {
+            scrollX: true
         })
     },
-    async created() {
-        //this.queryList()
-    },
+    async created() {},
     methods: {
         async initData() {
             // 实例化socket
@@ -547,9 +636,49 @@ export default {
             this.$socket.onmessage = this.getMessage
         },
 
+        // 日期数据
+        initDate() {
+            if (this.interval) {
+                clearInterval(this.interval)
+            }
+            this.interval = setInterval(() => {
+                this.dateData = getDate()
+            }, 1000)
+        },
+
+        getListInterval() {
+            this.getAlarmList({ get: 'all' })
+            if (this.listInterval) {
+                clearInterval(this.listInterval)
+            }
+            this.listInterval = setInterval(() => {
+                this.getAlarmList({ get: 'all' })
+            }, 10000)
+        },
+
+        hover(item) {
+            item.zindex = 300
+            item.show = true
+        },
+
+        out(item) {
+            item.show = false
+            item.zindex = 100
+            item.clickShow = false
+        },
+        toggleclick(item) {
+            if (item.clickShow) {
+                item.zindex = 300
+                item.show = true
+            } else {
+                item.zindex = 100
+                item.show = false
+            }
+            item.clickShow = !item.clickShow
+        },
+
         open: function() {
             console.log('socket连接成功')
-            // this.send('setCarReco')
         },
 
         error: function() {
@@ -570,19 +699,15 @@ export default {
             }
             // 报警
             if (data.cmd === 'alarm') {
-                this.alarm = data.value
+                // this.alarm = data.value
+                // 收到报警拉取新列表
+                this.getAlarmList({ get: 'all' })
             }
         },
 
         send: function(params) {
-            console.log('send')
             this.$socket.send(params)
         },
-
-        // getUID
-        /*   async getUID() {
-            await this.$store.dispatch('index/getUID')
-        }, */
 
         // 项目概况
         getProjectInfo() {
@@ -605,8 +730,12 @@ export default {
         },
 
         // 报警列表
-        getAlarmList(data) {
-            this.$store.dispatch('index/getAlarmList', data)
+        async getAlarmList(data) {
+            await this.$store.dispatch('index/getAlarmList', data)
+            this.scroll.refresh() //如果dom结构发生改变调用该方法
+            if (data.get === 'all') {
+                this.getMapWarningList()
+            }
         },
 
         // 报警列表
@@ -614,6 +743,30 @@ export default {
             this.$store.dispatch('index/getMeterData', data)
         },
 
+        getMapWarningList() {
+            // 0 未处理 1 误报 2 已完成
+            let newArry = []
+            this.alarmList.forEach((item) => {
+                // 未处理的显示到大屏
+                if (item.status === 0) {
+                    let newNodde = Object.assign({}, item)
+                    newNodde.show = false
+                    newNodde.clickShow = false
+                    newNodde.zindex = 100
+                    if (newNodde.alarmLevel === 0 || newNodde.alarmLevel === 1) {
+                        newArry.push(item)
+                    }
+                }
+            })
+            this.realAlarmList = newArry
+        },
+
+        // 塔吊位置数据
+        getMachineData() {
+            this.$store.dispatch('index/getMachineData')
+        },
+
+        // 报警列表tab点击事件
         toggleTab(item) {
             this.tabList.forEach((itme) => {
                 itme.checked = false
@@ -623,7 +776,6 @@ export default {
             if (item.id === 'all') {
                 subData = { get: item.id }
             }
-
             this.getAlarmList(subData)
         }
     }
