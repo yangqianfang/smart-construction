@@ -203,7 +203,7 @@
                             <div class="item-content">
                                 <div class="car-info">
                                     <div class="img">
-                                        <img :src="personData.imgUrl" />
+                                        <img v-if="personData.imgUrl" :src="personData.imgUrl" />
                                     </div>
                                     <div class="detail">
                                         <div class="li">{{ personData.recoTime }}</div>
