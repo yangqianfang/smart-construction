@@ -668,15 +668,38 @@ export default {
             item.zindex = 100
             item.clickShow = false
         },
-        toggleclick(item) {
-            if (item.clickShow) {
-                item.zindex = 300
-                item.show = true
+
+        // 点击大屏报警
+        toggleclick(node) {
+            if (node.clickShow) {
+                node.zindex = 300
+                node.show = true
             } else {
-                item.zindex = 100
-                item.show = false
+                node.zindex = 100
+                node.show = false
             }
-            item.clickShow = !item.clickShow
+            node.clickShow = true
+
+            // 清除其他选中
+            let realAlarmListActiveData = this.realAlarmList.filter((item) => item.active === true)
+            if (realAlarmListActiveData.length > 0) {
+                realAlarmListActiveData[0].active = false
+            }
+            // 当前激活
+            node.active = true
+
+            // 清除列表中状态
+            let activeData = this.alarmList.filter((item) => item.active === true)
+            if (activeData.length > 0) {
+                activeData[0].active = false
+            }
+            // 当前大屏点击激活
+
+            let data = this.alarmList.filter((item) => item.id === node.id)
+            if (data.length > 0) {
+                let curData = data[0]
+                curData.active = true
+            }
         },
 
         open: function() {
@@ -705,9 +728,9 @@ export default {
 
         // 接受socket 返回数据
         getMessage: function(msg) {
-            console.log('socket 返回')
+            // console.log('socket 返回')
             let data = JSON.parse(msg.data)
-            console.log(msg.data)
+            // console.log(msg.data)
             // 人行
             if (data.cmd === 'setPersonReco') {
                 this.$store.dispatch('index/setPeople', data.value)
