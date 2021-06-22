@@ -28,7 +28,8 @@
                 :key="`a_${index}`"
                 :class="{
                     danger: String(item.alarmLevel) === '1',
-                    warning: String(item.alarmLevel) === '0'
+                    warning: String(item.alarmLevel) === '0',
+                    active: item.active === true
                 }"
                 :style="{
                     top: item.deviceY + 'px',
@@ -271,6 +272,7 @@
                                                 }"
                                                 v-for="(item, index) in alarmList"
                                                 :key="index"
+                                                @click="alarmClick(item)"
                                             >
                                                 <div class="wt-img">
                                                     <img :src="item.alarmURI" />
@@ -700,6 +702,7 @@ export default {
             console.log('连接错误')
         },
 
+        // 接受socket 返回数据
         getMessage: function(msg) {
             console.log('socket 返回')
             let data = JSON.parse(msg.data)
@@ -786,6 +789,24 @@ export default {
             this.realAlarmList = newArry
         },
 
+        // 点击报警列表
+        alarmClick(node) {
+            // 清除选中状态
+            console.log(node)
+            let activeData = this.realAlarmList.filter((item) => item.active === true)
+            if (activeData.length > 0) {
+                activeData[0].active = false
+            }
+            // 当前点击激活
+            if (node.status === 0) {
+                let data = this.realAlarmList.filter((item) => item.id === node.id)
+                if (data.length > 0) {
+                    let curData = data[0]
+                    curData.active = true
+                }
+            }
+        },
+
         // 收到报警后更新报警状态
         addRealAlarm(node) {
             // console.log(node)
@@ -831,9 +852,7 @@ export default {
                 // 添加到列表
                 console.log('添加到新列表')
                 this.alarmList.unshift(node)
-                setTimeout(() => {
-                    this.scroll.refresh()
-                }, 200)
+                this.scroll.refresh()
             }
         },
 

@@ -215,7 +215,12 @@
                     width: 74px;
                     height: 74px;
                     border-radius: 50%;
-                    opacity: 0;
+                    opacity: 0.4;
+                    
+                }
+            }
+            &.active{
+                .c-1{
                     animation: warn 1s ease-out;
                     animation-iteration-count: infinite;
                 }
@@ -931,6 +936,7 @@
                                         display: inline-block;
                                          white-space: nowrap;
                                        .wl-item {
+                                           cursor: pointer;
                                             width: 146px;
                                             border-radius: 10px;
                                             display: inline-block;
