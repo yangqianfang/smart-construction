@@ -5,10 +5,15 @@
 ```
 下载并安装node https://nodejs.org/zh-cn/download/
 ```
+## 安装cnpm 
+```
+npm install cnpm -g --registry=https://registry.npm.taobao.org
+```
+
 
 ## 安装依赖 
 ```
-npm install
+cnpm install
 ```
 
 ### 运行开发环境
