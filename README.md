@@ -1,16 +1,16 @@
-# store-web
+# smart-construction
 
-## Project setup
+## 启动项目
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 运行开发环境
 ```
 npm run dev
 ```
 
-### Compiles and minifies for production
+### 
 ```
 npm run build
 ```
