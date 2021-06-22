@@ -26,7 +26,7 @@
         ;(function() {
             let app = document.getElementById('app')
             function scale(params) {
-                let cw = document.documentElement.clientWidth-10
+                let cw = document.documentElement.clientWidth
                 let ch = document.documentElement.clientHeight
 
                 let sw = (cw * 1080) / 1920
@@ -34,13 +34,12 @@
                 let zoomNum = cw / 1920
                 // 缩放级别
                 zoomNum = zoomNum.toFixed(2)
-                console.log(zoomNum)
-
+                
                 sh = zoomNum * 1080
 
                 let left = parseInt((1920 - cw) / 2)
                 let top = parseInt((1080 - sw) / 2)
-                console.log(ch, sh)
+                
                 if (ch <= sh) {
                     cw = cw - 20
                     zoomNum = cw / 1920

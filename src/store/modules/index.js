@@ -42,10 +42,10 @@ const module = {
         setAlarmList(state, data) {
             state.alarmList = data
         },
-        setPeople(state, data) {
+        setPeopleData(state, data) {
             state.personData = data
         },
-        setCar(state, data) {
+        setCarData(state, data) {
             state.carData = data
         },
         setMeterData(state, data) {
@@ -88,10 +88,12 @@ const module = {
         },
 
         // 报警列表
+        // eslint-disable-next-line no-unused-vars
         async getAlarmList({ commit }, data) {
             const res = await $api.post('/site/alarm/getAlarmList', data)
             // console.log(res.data.data.alarmList)
-            commit('setAlarmList', res.data.data.alarmList)
+            return res.data.data.alarmList
+            // commit('setAlarmList', res.data.data.alarmList)
         },
         //水电数据
         async getMeterData({ commit }, data) {

@@ -35,6 +35,7 @@
                     left: item.deviceX + 'px',
                     'z-index': item.zindex
                 }"
+                :id="item.id"
                 @mouseenter="hover(item)"
                 @mouseleave="out(item)"
                 @click="toggleclick(item)"
@@ -182,7 +183,7 @@
                             <div class="item-content">
                                 <div class="car-info">
                                     <div class="img">
-                                        <!-- <img :src="carData.imgUrl" /> -->
+                                        <img v-if="carData.imgUrl" :src="carData.imgUrl" />
                                     </div>
                                     <div class="detail">
                                         <div class="li">{{ carData.recoTime }}</div>
@@ -581,7 +582,11 @@ export default {
                 { id: '烟火', name: '烟火', checked: false },
                 { id: '危险入侵', name: '危险入侵', checked: false }
             ],
-            realAlarmList: []
+            alarmList: [],
+            realAlarmList: [],
+            // 报警坐标范围
+            rangeX: [450, 1400],
+            rangeY: [80, 620]
         }
     },
     computed: {
@@ -592,7 +597,7 @@ export default {
             weatherData: (state) => state.weatherData,
             personData: (state) => state.personData,
             carData: (state) => state.carData,
-            alarmList: (state) => state.alarmList,
+            // alarmList: (state) => state.alarmList,
             meterData: (state) => state.meterData
         })
     },
@@ -648,12 +653,6 @@ export default {
 
         getListInterval() {
             this.getAlarmList({ get: 'all' })
-            if (this.listInterval) {
-                clearInterval(this.listInterval)
-            }
-            this.listInterval = setInterval(() => {
-                this.getAlarmList({ get: 'all' })
-            }, 10000)
         },
 
         hover(item) {
@@ -679,6 +678,22 @@ export default {
 
         open: function() {
             console.log('socket连接成功')
+            /* setInterval(() => {
+                let data = {
+                    id: 88,
+                    alarmURI:
+                        'https://xuzhi-1305205599.cos.ap-nanjing.myqcloud.com/alarm/20210610212252.jpg',
+                    alarmAddr: '88',
+                    alarmTime: '2021-06-21 10:07:05',
+                    siteId: 100,
+                    alarmType: '88888',
+                    status: 0,
+                    alarmLevel: 1,
+                    deviceY: 300.0,
+                    deviceX: 1200.0
+                }
+                this.addRealAlarm(data)
+            }, 5000) */
         },
 
         error: function() {
@@ -687,8 +702,8 @@ export default {
 
         getMessage: function(msg) {
             console.log('socket 返回')
+            let data = JSON.parse(msg.data)
             console.log(msg.data)
-            let data = msg.data
             // 人行
             if (data.cmd === 'setPersonReco') {
                 this.$store.dispatch('index/setPeople', data.value)
@@ -699,9 +714,10 @@ export default {
             }
             // 报警
             if (data.cmd === 'alarm') {
+                this.addRealAlarm(data.value)
                 // this.alarm = data.value
                 // 收到报警拉取新列表
-                this.getAlarmList({ get: 'all' })
+                // this.getAlarmList({ get: 'all' })
             }
         },
 
@@ -731,7 +747,7 @@ export default {
 
         // 报警列表
         async getAlarmList(data) {
-            await this.$store.dispatch('index/getAlarmList', data)
+            this.alarmList = await this.$store.dispatch('index/getAlarmList', data)
             this.scroll.refresh() //如果dom结构发生改变调用该方法
             if (data.get === 'all') {
                 this.getMapWarningList()
@@ -747,18 +763,78 @@ export default {
             // 0 未处理 1 误报 2 已完成
             let newArry = []
             this.alarmList.forEach((item) => {
-                // 未处理的显示到大屏
-                if (item.status === 0) {
-                    let newNodde = Object.assign({}, item)
-                    newNodde.show = false
-                    newNodde.clickShow = false
-                    newNodde.zindex = 100
-                    if (newNodde.alarmLevel === 0 || newNodde.alarmLevel === 1) {
-                        newArry.push(item)
+                // 未处理的显示到大屏 坐标再范围内
+                if (
+                    item.deviceX > this.rangeX[0] &&
+                    item.deviceX < this.rangeX[1] &&
+                    item.deviceY > this.rangeY[0] &&
+                    item.deviceY < this.rangeY[1]
+                ) {
+                    if (item.status === 0) {
+                        let newNodde = Object.assign({}, item)
+                        newNodde.show = false
+                        newNodde.clickShow = false
+                        newNodde.zindex = 100
+                        if (newNodde.alarmLevel === 0 || newNodde.alarmLevel === 1) {
+                            newArry.push(item)
+                        }
                     }
+                } else {
+                    console.log('坐标不符合规范')
                 }
             })
             this.realAlarmList = newArry
+        },
+
+        // 收到报警后更新报警状态
+        addRealAlarm(node) {
+            // console.log(node)
+            //大屏报警里查找
+            let dapingHasList = this.realAlarmList.filter((item) => node.id === item.id)
+            //列表里查找
+            let listHasList = this.alarmList.filter((item) => node.id === item.id)
+
+            // 重复的id报警，更新状态
+            if (dapingHasList.length > 0) {
+                // console.log('大屏重复id，更新状态')
+                dapingHasList[0].status = node.status
+                // console.log(dapingHasList[0])
+                // 更新显示数据
+                this.getMapWarningList()
+            } else {
+                //报警
+                if (
+                    node.deviceX > this.rangeX[0] &&
+                    node.deviceX < this.rangeX[1] &&
+                    node.deviceY > this.rangeY[0] &&
+                    node.deviceY < this.rangeY[1]
+                ) {
+                    if (node.status === 0) {
+                        // 新的报警添加到大屏报警列表
+                        node.show = false
+                        node.clickShow = false
+                        node.zindex = 100
+                        // console.log('添加到新报警大屏')
+                        // 添加到到报警
+                        this.realAlarmList.unshift(node)
+                    }
+                } else {
+                    console.log('坐标不符合规范')
+                }
+            }
+
+            // 列表里有，更新数据状态
+            if (listHasList.length > 0) {
+                console.log('列表重复id，更新状态')
+                listHasList[0].status = node.status
+            } else {
+                // 添加到列表
+                console.log('添加到新列表')
+                this.alarmList.unshift(node)
+                setTimeout(() => {
+                    this.scroll.refresh()
+                }, 200)
+            }
         },
 
         // 塔吊位置数据
