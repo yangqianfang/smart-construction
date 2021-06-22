@@ -1,6 +1,6 @@
 # smart-construction
 
-## 启动项目
+## 启动项目安装依赖包
 ```
 npm install
 ```
@@ -10,7 +10,7 @@ npm install
 npm run dev
 ```
 
-### 
+### 打包项目
 ```
 npm run build
 ```
