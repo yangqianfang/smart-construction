@@ -8,11 +8,11 @@
 .wrap {
     width: 1920px;
     height: 1080px;
-    margin: 0 auto; 
+    margin: 0 auto;
     background: #478ebe24;
     background: url(@bg) no-repeat;
     background-size: 1920px 1080px;
-    .swiper-slide{
+    .swiper-slide {
         background: #16f7ff;
     }
     .content {
@@ -41,8 +41,8 @@
                 align-items: center;
                 justify-content: center;
                 z-index: 8;
-                padding: 0 30px 0 0px; 
-                display: none; 
+                padding: 0 30px 0 0px;
+                display: none;
                 transition: all 0.5s;
                 opacity: 0;
                 .title {
@@ -216,11 +216,10 @@
                     height: 74px;
                     border-radius: 50%;
                     opacity: 0.4;
-                    
                 }
             }
-            &.active{
-                .c-1{
+            &.active {
+                .c-1 {
                     animation: warn 1s ease-out;
                     animation-iteration-count: infinite;
                 }
@@ -776,7 +775,7 @@
                             //图表
                             .chart-box {
                                 padding-top: 20px;
-                                .null{
+                                .null {
                                     color: #fff;
                                     height: 140px;
                                     display: flex;
@@ -928,15 +927,15 @@
                                         }
                                     }
                                 }
-                               .wb-list {
+                                .wb-list {
                                     padding-top: 14px;
                                     overflow: hidden;
                                     text-align: left;
-                                     .wb-list-wrap {
+                                    .wb-list-wrap {
                                         display: inline-block;
-                                         white-space: nowrap;
-                                       .wl-item {
-                                           cursor: pointer;
+                                        white-space: nowrap;
+                                        .wl-item {
+                                            cursor: pointer;
                                             width: 146px;
                                             border-radius: 10px;
                                             display: inline-block;
@@ -948,7 +947,6 @@
                                             }
 
                                             .wt-img {
-                                                width: 142px;
                                                 height: 142px;
                                                 overflow: hidden;
                                                 border-radius: 10px 10px 0 0;
@@ -972,6 +970,14 @@
                                                 .wt-img {
                                                     img {
                                                         border-bottom: 2px solid #ff181b;
+                                                    }
+                                                }
+                                            }
+                                            &.active {
+                                                border-width: 4px;
+                                                .wt-img {
+                                                    img {
+                                                        border-width: 4px;
                                                     }
                                                 }
                                             }

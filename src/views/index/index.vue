@@ -268,7 +268,8 @@
                                                         String(item.status) === '0',
                                                     warning:
                                                         String(item.alarmLevel) === '0' &&
-                                                        String(item.status) === '0'
+                                                        String(item.status) === '0',
+                                                    active: item.active === true
                                                 }"
                                                 v-for="(item, index) in alarmList"
                                                 :key="index"
@@ -753,7 +754,7 @@ export default {
             this.alarmList = await this.$store.dispatch('index/getAlarmList', data)
             this.scroll.refresh() //如果dom结构发生改变调用该方法
             if (data.get === 'all') {
-                this.getMapWarningList()
+                this.getRealWarningList()
             }
         },
 
@@ -762,7 +763,8 @@ export default {
             this.$store.dispatch('index/getMeterData', data)
         },
 
-        getMapWarningList() {
+        // 获取大屏报警数据
+        getRealWarningList() {
             // 0 未处理 1 误报 2 已完成
             let newArry = []
             this.alarmList.forEach((item) => {
@@ -791,13 +793,20 @@ export default {
 
         // 点击报警列表
         alarmClick(node) {
-            // 清除选中状态
-            console.log(node)
+            // 清除其他选中
+            let alarmListActiveData = this.alarmList.filter((item) => item.active === true)
+            if (alarmListActiveData.length > 0) {
+                alarmListActiveData[0].active = false
+            }
+            // 当前激活
+            node.active = true
+
+            // 清除大屏选中状态
             let activeData = this.realAlarmList.filter((item) => item.active === true)
             if (activeData.length > 0) {
                 activeData[0].active = false
             }
-            // 当前点击激活
+            // 当前大屏点击激活
             if (node.status === 0) {
                 let data = this.realAlarmList.filter((item) => item.id === node.id)
                 if (data.length > 0) {
@@ -821,7 +830,7 @@ export default {
                 dapingHasList[0].status = node.status
                 // console.log(dapingHasList[0])
                 // 更新显示数据
-                this.getMapWarningList()
+                this.getRealWarningList()
             } else {
                 //报警
                 if (
