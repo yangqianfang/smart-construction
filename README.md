@@ -1,6 +1,12 @@
 # smart-construction 智慧园区
 
-## 启动项目安装依赖包
+
+## 启动项目 
+```
+下载并安装node https://nodejs.org/zh-cn/download/
+```
+
+## 安装依赖 
 ```
 npm install
 ```
