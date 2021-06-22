@@ -5,6 +5,8 @@
 import Vue from 'vue'
 import axios from 'axios'
 // import qs from 'qs'
+import { Toast } from 'vant'
+
 // const md5 = require('blueimp-md5')
 
 const defaults = {
