@@ -271,6 +271,7 @@
                                                         String(item.status) === '0',
                                                     active: item.active === true
                                                 }"
+                                                :ids="item.id"
                                                 v-for="(item, index) in alarmList"
                                                 :key="index"
                                                 @click="alarmClick(item)"
@@ -566,7 +567,6 @@
 import { mapState } from 'vuex'
 import BScroll from '@better-scroll/core'
 import { machineData, getDate } from '@/utils/index'
-console.log(BScroll)
 export default {
     components: {},
     data() {
@@ -775,7 +775,10 @@ export default {
         // 报警列表
         async getAlarmList(data) {
             this.alarmList = await this.$store.dispatch('index/getAlarmList', data)
-            this.scroll.refresh() //如果dom结构发生改变调用该方法
+            setTimeout(() => {
+                this.scroll.refresh() //如果dom结构发生改变调用该方法
+            }, 200)
+
             if (data.get === 'all') {
                 this.getRealWarningList()
             }
