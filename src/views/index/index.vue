@@ -631,8 +631,6 @@ export default {
     async created() {},
     methods: {
         async initData() {
-            // 实例化socket
-            // this.socket = new WebSocket('wss://xuzhiai.cn/ws/server')
             // 监听socket连接
             this.$socket.onopen = this.open
             // 监听socket错误信息
@@ -704,22 +702,6 @@ export default {
 
         open: function() {
             console.log('socket连接成功')
-            /* setInterval(() => {
-                let data = {
-                    id: 88,
-                    alarmURI:
-                        'https://xuzhi-1305205599.cos.ap-nanjing.myqcloud.com/alarm/20210610212252.jpg',
-                    alarmAddr: '88',
-                    alarmTime: '2021-06-21 10:07:05',
-                    siteId: 100,
-                    alarmType: '88888',
-                    status: 0,
-                    alarmLevel: 1,
-                    deviceY: 300.0,
-                    deviceX: 1200.0
-                }
-                this.addRealAlarm(data)
-            }, 5000) */
         },
 
         error: function() {
@@ -742,9 +724,6 @@ export default {
             // 报警
             if (data.cmd === 'alarm') {
                 this.addRealAlarm(data.value)
-                // this.alarm = data.value
-                // 收到报警拉取新列表
-                // this.getAlarmList({ get: 'all' })
             }
         },
 
