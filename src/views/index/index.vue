@@ -32,8 +32,8 @@
                     active: item.active === true
                 }"
                 :style="{
-                    top: item.deviceY + 'px',
-                    left: item.deviceX + 'px',
+                    top: rangeY[0] + (rangeY[1] - rangeY[0]) * item.deviceY + 'px',
+                    left: rangeX[0] + (rangeX[1] - rangeX[0]) * item.deviceX + 'px',
                     'z-index': item.zindex
                 }"
                 :id="item.id"
@@ -792,23 +792,15 @@ export default {
             let newArry = []
             this.alarmList.forEach((item) => {
                 // 未处理的显示到大屏 坐标再范围内
-                if (
-                    item.deviceX > this.rangeX[0] &&
-                    item.deviceX < this.rangeX[1] &&
-                    item.deviceY > this.rangeY[0] &&
-                    item.deviceY < this.rangeY[1]
-                ) {
-                    if (item.status === 0) {
-                        let newNodde = Object.assign({}, item)
-                        newNodde.show = false
-                        newNodde.clickShow = false
-                        newNodde.zindex = 100
-                        if (newNodde.alarmLevel === 0 || newNodde.alarmLevel === 1) {
-                            newArry.push(item)
-                        }
+
+                if (item.status === 0) {
+                    let newNodde = Object.assign({}, item)
+                    newNodde.show = false
+                    newNodde.clickShow = false
+                    newNodde.zindex = 100
+                    if (newNodde.alarmLevel === 0 || newNodde.alarmLevel === 1) {
+                        newArry.push(item)
                     }
-                } else {
-                    console.log('坐标不符合规范')
                 }
             })
             this.realAlarmList = newArry
@@ -856,23 +848,15 @@ export default {
                 this.getRealWarningList()
             } else {
                 //报警
-                if (
-                    node.deviceX > this.rangeX[0] &&
-                    node.deviceX < this.rangeX[1] &&
-                    node.deviceY > this.rangeY[0] &&
-                    node.deviceY < this.rangeY[1]
-                ) {
-                    if (node.status === 0) {
-                        // 新的报警添加到大屏报警列表
-                        node.show = false
-                        node.clickShow = false
-                        node.zindex = 100
-                        // console.log('添加到新报警大屏')
-                        // 添加到到报警
-                        this.realAlarmList.unshift(node)
-                    }
-                } else {
-                    console.log('坐标不符合规范')
+
+                if (node.status === 0) {
+                    // 新的报警添加到大屏报警列表
+                    node.show = false
+                    node.clickShow = false
+                    node.zindex = 100
+                    // console.log('添加到新报警大屏')
+                    // 添加到到报警
+                    this.realAlarmList.unshift(node)
                 }
             }
 
