@@ -685,6 +685,7 @@ export default {
             let realAlarmListActiveData = this.realAlarmList.filter((item) => item.active === true)
             if (realAlarmListActiveData.length > 0) {
                 realAlarmListActiveData[0].active = false
+                realAlarmListActiveData[0].clickShow = false
             }
             // 当前激活
             node.active = true
@@ -793,7 +794,7 @@ export default {
                     newNodde.clickShow = false
                     newNodde.zindex = 100
                     if (newNodde.alarmLevel === 0 || newNodde.alarmLevel === 1) {
-                        newArry.push(item)
+                        newArry.push(newNodde)
                     }
                 }
             })
@@ -814,6 +815,7 @@ export default {
             let activeData = this.realAlarmList.filter((item) => item.active === true)
             if (activeData.length > 0) {
                 activeData[0].active = false
+                activeData[0].clickShow = false
             }
             // 当前大屏点击激活
             if (node.status === 0) {
@@ -856,11 +858,11 @@ export default {
 
             // 列表里有，更新数据状态
             if (listHasList.length > 0) {
-                console.log('列表重复id，更新状态')
+                // console.log('列表重复id，更新状态')
                 listHasList[0].status = node.status
             } else {
                 // 添加到列表
-                console.log('添加到新列表')
+                // console.log('添加到新列表')
                 this.alarmList.unshift(node)
                 this.scroll.refresh()
             }
