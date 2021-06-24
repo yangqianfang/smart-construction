@@ -79,9 +79,15 @@
                 border: 2px solid #1c90c6;
                 padding: 16px 8px;
                 z-index: 8;
-                transition: all 0.5s;
-                opacity: 0;
-                display: none;
+                transition: all 0.5s; 
+                visibility: hidden;
+                &.tips-left{
+                    left: auto;
+                    right: 80px;
+                }
+                &.tips-top{ 
+                    top:-150%; 
+                }
                 .wd-img {
                     width: 100px;
                     height: 100px;
@@ -111,6 +117,7 @@
                 }
                 &.show {
                     display: flex;
+                    visibility:visible;
                     opacity: 1;
                 }
             }

@@ -32,8 +32,8 @@
                     active: item.active === true
                 }"
                 :style="{
-                    top: rangeY[0] + (rangeY[1] - rangeY[0]) * item.deviceY + 'px',
-                    left: rangeX[0] + (rangeX[1] - rangeX[0]) * item.deviceX + 'px',
+                    top: item.top + 'px',
+                    left: item.left + 'px',
                     'z-index': item.zindex
                 }"
                 :id="item.id"
@@ -49,7 +49,16 @@
                     <div class="split"></div>
                     <div class="address">{{ item.alarmAddr }}</div>
                 </div>
-                <div class="warning-detail" :class="{ show: item.clickShow === true }">
+                <div
+                    class="warning-detail"
+                    :class="{
+                        show: item.clickShow === true,
+                        'tips-left': item.ops && item.ops.indexOf('tips-left') > -1,
+                        'tips-top': item.ops && item.ops.indexOf('tips-top') > -1
+                    }"
+                    :id="'detail_' + item.id"
+                    :ref="'detail_' + item.id"
+                >
                     <div class="wd-img" v-if="item.alarmURI">
                         <img :src="item.alarmURI" />
                     </div>
@@ -672,18 +681,32 @@ export default {
 
         // 点击大屏报警
         toggleclick(node) {
-            if (node.clickShow) {
-                node.zindex = 300
-                node.show = true
-            } else {
-                node.zindex = 100
-                node.show = false
-            }
+            node.zindex = 300
+            node.show = false
             node.clickShow = true
+            let offsetWidth = this.$refs[`detail_${node.id}`][0].offsetWidth
+            let offsetHeight = this.$refs[`detail_${node.id}`][0].offsetHeight
+            console.log(offsetWidth, offsetHeight)
+            console.log(`最大范围x${this.rangeX[1]},实际${node.left + offsetWidth}`)
+            console.log(`最大范围y${this.rangeY[1]},实际${node.top + offsetWidth / 2}`)
+
+            let ops = ''
+            if (node.top + offsetHeight / 2 > this.rangeY[1]) {
+                ops += 'tips-top'
+            }
+
+            if (node.left + offsetWidth > this.rangeX[1]) {
+                ops += 'tips-left'
+            }
+
+            node.ops = ops
 
             // 清除其他选中
             let realAlarmListActiveData = this.realAlarmList.filter((item) => item.active === true)
             if (realAlarmListActiveData.length > 0) {
+                if (realAlarmListActiveData[0].id === node.id) {
+                    return
+                }
                 realAlarmListActiveData[0].active = false
                 realAlarmListActiveData[0].clickShow = false
             }
@@ -787,12 +810,14 @@ export default {
             let newArry = []
             this.alarmList.forEach((item) => {
                 // 未处理的显示到大屏 坐标再范围内
-
                 if (item.status === 0) {
                     let newNodde = Object.assign({}, item)
                     newNodde.show = false
                     newNodde.clickShow = false
                     newNodde.zindex = 100
+                    newNodde.top = this.rangeY[0] + (this.rangeY[1] - this.rangeY[0]) * item.deviceY
+                    newNodde.left =
+                        this.rangeX[0] + (this.rangeX[1] - this.rangeX[0]) * item.deviceX
                     if (newNodde.alarmLevel === 0 || newNodde.alarmLevel === 1) {
                         newArry.push(newNodde)
                     }
