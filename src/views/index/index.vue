@@ -627,7 +627,8 @@ export default {
         this.getListInterval()
 
         this.scroll = new BScroll('.wb-list', {
-            scrollX: true
+            scrollX: true,
+            click: true
         })
     },
     async created() {},
