@@ -15,7 +15,14 @@
                 @mouseleave="out(item)"
             >
                 <div class="icon"></div>
-                <div class="address-detail" :class="{ show: item.show === true }">
+                <div
+                    class="address-detail"
+                    :ref="'hover_detail_' + item.id"
+                    :class="{
+                        show: item.show === true,
+                        'tips-left': item.hoverops && item.hoverops === 'tips-left'
+                    }"
+                >
                     <div class="title">{{ item.name }}</div>
                     <div class="split"></div>
                     <div class="address">{{ item.address }}</div>
@@ -44,7 +51,14 @@
                 <div class="icon"></div>
                 <div class="c-0"></div>
                 <div class="c-1"></div>
-                <div class="address-detail" :class="{ show: item.show === true }">
+                <div
+                    class="address-detail"
+                    :class="{
+                        show: item.show === true,
+                        'tips-left': item.hoverops && item.hoverops === 'tips-left'
+                    }"
+                    :ref="'hover_detail_' + item.id"
+                >
                     <div class="title">{{ item.alarmType }}</div>
                     <div class="split"></div>
                     <div class="address">{{ item.alarmAddr }}</div>
@@ -669,6 +683,10 @@ export default {
         },
 
         hover(item) {
+            let offsetWidth = this.$refs[`hover_detail_${item.id}`][0].offsetWidth
+            if (parseInt(item.left) + parseInt(offsetWidth) > this.rangeX[1]) {
+                item.hoverops = 'tips-left'
+            }
             item.zindex = 300
             item.show = true
         },

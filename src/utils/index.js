@@ -8,9 +8,26 @@ import * as dayjs from 'dayjs'
 // 塔吊摄像头数据
 export const machineData = [
     // { left: '830', top: '705', name: '相机163', address: '门口', type: '1', show: true },
-    { left: '930', top: '420', name: '相机162', address: '5号楼右侧走廊', type: '1', show: false },
-    { left: '1140', top: '540', name: '相机164', address: '5号楼水池', type: '1', show: false },
     {
+        id: 'machine_01',
+        left: '930',
+        top: '420',
+        name: '相机162',
+        address: '5号楼右侧走廊',
+        type: '1',
+        show: false
+    },
+    {
+        id: 'machine_02',
+        left: '1140',
+        top: '540',
+        name: '相机164',
+        address: '5号楼水池',
+        type: '1',
+        show: false
+    },
+    {
+        id: 'machine_03',
         left: '1180',
         top: '240',
         name: '相机166',
@@ -18,13 +35,69 @@ export const machineData = [
         type: '1',
         show: false
     },
-    { left: '1430', top: '240', name: '相机165', address: '9号楼左侧', type: '1', show: false },
-    { left: '930', top: '360', name: '相机167', address: '5号楼右侧', type: '1', show: false },
-    { left: '860', top: '590', name: '塔吊机', address: '1234号楼', type: '2', show: false },
-    { left: '1160', top: '320', name: '塔吊机', address: '567号楼', type: '2', show: false },
-    { left: '1380', top: '210', name: '塔吊机', address: '89号楼', type: '2', show: false },
-    { left: '980', top: '430', name: '升降机', address: '5号楼', type: '3', show: false },
-    { left: '1200', top: '170', name: '升降机', address: '8号楼', type: '3', show: false }
+    {
+        id: 'machine_04',
+        left: '1430',
+        top: '240',
+        name: '相机165',
+        address: '9号楼左侧',
+        type: '1',
+        show: false
+    },
+    {
+        id: 'machine_05',
+        left: '930',
+        top: '360',
+        name: '相机167',
+        address: '5号楼右侧',
+        type: '1',
+        show: false
+    },
+    {
+        id: 'machine_06',
+        left: '860',
+        top: '590',
+        name: '塔吊机',
+        address: '1234号楼',
+        type: '2',
+        show: false
+    },
+    {
+        id: 'machine_07',
+        left: '1160',
+        top: '320',
+        name: '塔吊机',
+        address: '567号楼',
+        type: '2',
+        show: false
+    },
+    {
+        id: 'machine_08',
+        left: '1380',
+        top: '210',
+        name: '塔吊机',
+        address: '89号楼',
+        type: '2',
+        show: false
+    },
+    {
+        id: 'machine_09',
+        left: '980',
+        top: '430',
+        name: '升降机',
+        address: '5号楼',
+        type: '3',
+        show: false
+    },
+    {
+        id: 'machine_10',
+        left: '1200',
+        top: '170',
+        name: '升降机',
+        address: '8号楼',
+        type: '3',
+        show: false
+    }
 ]
 
 export function getItembyDate(list, date) {

@@ -41,10 +41,15 @@
                 align-items: center;
                 justify-content: center;
                 z-index: 8;
-                padding: 0 30px 0 0px;
-                display: none;
+                padding: 0 30px 0 0px; 
+                visibility: visible;
                 transition: all 0.5s;
+                visibility: hidden;
                 opacity: 0;
+                &.tips-left{
+                    left: auto !important;
+                    right: 60px !important;
+                }
                 .title {
                     font-family: PingFangSC-Semibold;
                     font-size: 14px;
@@ -65,7 +70,7 @@
                     padding-left: 10px;
                 }
                 &.show {
-                    display: flex;
+                    visibility:visible;
                     opacity: 1;
                 }
             }
