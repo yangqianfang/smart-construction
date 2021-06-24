@@ -686,10 +686,6 @@ export default {
             node.clickShow = true
             let offsetWidth = this.$refs[`detail_${node.id}`][0].offsetWidth
             let offsetHeight = this.$refs[`detail_${node.id}`][0].offsetHeight
-            console.log(offsetWidth, offsetHeight)
-            console.log(`最大范围x${this.rangeX[1]},实际${node.left + offsetWidth}`)
-            console.log(`最大范围y${this.rangeY[1]},实际${node.top + offsetWidth / 2}`)
-
             let ops = ''
             if (node.top + offsetHeight / 2 > this.rangeY[1]) {
                 ops += 'tips-top'
