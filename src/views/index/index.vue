@@ -580,11 +580,12 @@ export default {
             scroll: '',
             tabList: [
                 { id: 'all', name: '全部', checked: true },
-                { id: '安全帽', name: '安全帽', checked: false },
-                { id: '反光衣', name: '反光衣', checked: false },
+                { id: '安全帽', name: '未戴安全帽', checked: false },
+                { id: '反光衣', name: '未穿反光衣', checked: false },
                 { id: '烟火', name: '烟火', checked: false },
                 { id: '危险入侵', name: '危险入侵', checked: false }
             ],
+            activeTab: {},
             alarmList: [],
             realAlarmList: [],
             // 报警坐标范围
@@ -607,6 +608,7 @@ export default {
     destroyed() {},
 
     async mounted() {
+        this.activeTab = this.tabList[0]
         // 获取日期
         this.initDate()
         // 项目信息
@@ -723,7 +725,16 @@ export default {
             }
             // 报警
             if (data.cmd === 'alarm') {
-                this.addRealAlarm(data.value)
+                let item = data.value
+                // 当前标签处于全部接受并显示去不类型数据
+                if (this.activeTab.name === '全部') {
+                    this.addRealAlarm(data.value)
+                } else {
+                    // 处于其他标签,就收到的数据要和当前tab类型相同才显示
+                    if (item.alarmType === this.activeTab.name) {
+                        this.addRealAlarm(data.value)
+                    }
+                }
             }
         },
 
@@ -861,6 +872,7 @@ export default {
 
         // 报警列表tab点击事件
         toggleTab(item) {
+            this.activeTab = item
             this.tabList.forEach((itme) => {
                 itme.checked = false
             })
