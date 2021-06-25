@@ -701,6 +701,11 @@ export default {
         toggleclick(node) {
             node.zindex = 300
             node.show = false
+
+            if (node.clickShow) {
+                node.clickShow = false
+                return
+            }
             node.clickShow = true
             let offsetWidth = this.$refs[`detail_${node.id}`][0].offsetWidth
             let offsetHeight = this.$refs[`detail_${node.id}`][0].offsetHeight
@@ -807,10 +812,7 @@ export default {
             setTimeout(() => {
                 this.scroll.refresh() //如果dom结构发生改变调用该方法
             }, 200)
-
-            if (data.get === 'all') {
-                this.getRealWarningList()
-            }
+            this.getRealWarningList()
         },
 
         // 报警列表

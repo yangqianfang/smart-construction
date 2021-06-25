@@ -93,6 +93,7 @@ const module = {
             const res = await $api.post('/site/alarm/getAlarmList', data)
             // console.log(res.data.data.alarmList)
             return res.data.data.alarmList
+
             // commit('setAlarmList', res.data.data.alarmList)
         },
         //水电数据
